@@ -39,21 +39,20 @@
 
 <script setup>
 import Login from '@/components/Login.vue';
+import Signup from '@/components/Signup.vue';
 import { useUserStore } from '@/store/user-store';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import Signup from '../components/Signup.vue';
 const userStore = useUserStore();
 const router = useRouter();
 let showSignup = ref(false);
-let email = ref('');
-let password = ref('');
 
 const login = (email, password) => {
   console.log(email, password);
 };
 
 const callback = async (response) => {
+  console.log(response);
   await userStore.getUserDetailsFromGoogle(response);
   setTimeout(() => {
     router.push('/');

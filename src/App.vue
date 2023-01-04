@@ -10,7 +10,7 @@ const userStore = useUserStore()
 const router = useRouter()
 
 onMounted(() => {
-  // console.log(userStore.sub);
-  if (!userStore.sub) router.push('/login')
+  // console.log(userStore.uid);
+  if (!userStore.uid) router.push('/login')
 })
 </script>

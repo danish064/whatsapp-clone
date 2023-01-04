@@ -36,17 +36,17 @@ import moment from 'moment'
 import { useUserStore } from '../store/user-store';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore()
-const { sub, userDataForChat } = storeToRefs(userStore)
+const { uid, userDataForChat } = storeToRefs(userStore)
 
 const props = defineProps({ chat: Object })
 const { chat } = toRefs(props)
 
 const isActive = computed(() => {
   if (userDataForChat.value.length) {
-    if (userDataForChat.value[0].sub1 === chat.value.user.sub) {
+    if (userDataForChat.value[0].uid1 === chat.value.user.uid) {
       return true
     }
-    if (userDataForChat.value[0].sub2 === chat.value.user.sub) {
+    if (userDataForChat.value[0].uid2 === chat.value.user.uid) {
       return true
     }
   }
@@ -55,12 +55,12 @@ const isActive = computed(() => {
 
 const tickColor = (chat) => {
   let color = ''
-  if (chat.sub1 === sub.value) {
-    if (chat.sub1HasViewed) color = '#7DF9FF'
+  if (chat.uid1 === uid.value) {
+    if (chat.user1HasViewed) color = '#7DF9FF'
     else color = '#B5B5B5'
   }
-  if (chat.sub2 === sub.value) {
-    if (chat.sub2HasViewed) color = '#7DF9FF'
+  if (chat.uid2 === uid.value) {
+    if (chat.user2HasViewed) color = '#7DF9FF'
     else color = '#B5B5B5'
   }
   return color

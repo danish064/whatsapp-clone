@@ -30,7 +30,7 @@
       >
         <div v-if="currentChat && currentChat.length" class="px-20 text-sm mb-2">
           <div v-for="msg in currentChat[0].messages" :key="msg">
-            <message :message="msg" :isSentMessage="msg.sub === sub" />
+            <message :message="msg" :isSentMessage="msg.uid === uid" />
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ import Message from '../components/Message.vue';
 import { useUserStore } from '../store/user-store';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
-const { userDataForChat, currentChat, sub } = storeToRefs(userStore);
+const { userDataForChat, currentChat, uid } = storeToRefs(userStore);
 
 let disableBtn = ref(false);
 let message = ref('');
@@ -98,7 +98,7 @@ const sendMessage = async () => {
 
   await userStore.sendMessage({
     message: message.value,
-    sub2: userDataForChat.value[0].sub2,
+    uid2: userDataForChat.value[0].uid2,
     chatId: userDataForChat.value[0].id,
   });
   message.value = '';
@@ -107,15 +107,15 @@ const sendMessage = async () => {
 
   let data = {
     id: userData.id,
-    key1: 'sub1HasViewed',
+    key1: 'user1HasViewed',
     val1: false,
-    key2: 'sub2HasViewed',
+    key2: 'user2HasViewed',
     val2: false,
   };
-  if (userData.sub1 === sub.value) {
+  if (userData.uid1 === uid.value) {
     data.val1 = true;
     data.val2 = false;
-  } else if (userData.sub2 === sub.value) {
+  } else if (userData.uid2 === uid.value) {
     data.val1 = false;
     data.val2 = true;
   }

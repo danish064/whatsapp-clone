@@ -17,7 +17,7 @@ import MessageRowComponent from '@/components/MessageRowComponent.vue';
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue';
 const userStore = useUserStore()
-const { chats, userDataForChat, sub } = storeToRefs(userStore)
+const { chats, userDataForChat, uid } = storeToRefs(userStore)
 
 onMounted(async () => {
     if (userDataForChat.value.length) {
@@ -29,8 +29,8 @@ const openChat = async (chat) => {
     userDataForChat.value = []
     userDataForChat.value.push({
         id: chat.id,
-        sub1: chat.sub1,
-        sub2: chat.sub2,
+        uid1: chat.uid1,
+        uid2: chat.uid2,
         firstName: chat.user.firstName,
         picture: chat.user.picture,
     })
@@ -38,13 +38,13 @@ const openChat = async (chat) => {
         await userStore.getChatById(chat.id)
         let data = {
             id: chat.id,
-            key1: 'sub1HasViewed', val1: false, 
-            key2: 'sub2HasViewed', val2: false, 
+            key1: 'user1HasViewed', val1: false, 
+            key2: 'user2HasViewed', val2: false, 
         }
-        if (chat.sub1 === sub.value) {
+        if (chat.uid1 === uid.value) {
             data.val1 = true
             data.val2 = true
-        } else if (chat.sub2 === sub.value) {
+        } else if (chat.uid2 === uid.value) {
             data.val1 = true
             data.val2 = true
         }

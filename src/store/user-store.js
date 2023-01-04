@@ -18,7 +18,7 @@ axios.defaults.baseURL = 'http://localhost:4001/'
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        sub: '',
+        uid: '',
         email: '',
         picture: '',
         firstName: '',
@@ -36,13 +36,13 @@ export const useUserStore = defineStore('user', {
                 let res = await axios.post('api/google-login', {
                     token: data.credential
                 })
-
+                console.log(res);
                 let userExists = await this.checkIfUserExists(res.data.sub)
                 if (!userExists) await this.saveUserDetails(res)
 
                 await this.getAllUsers()
 
-                this.sub = res.data.sub
+                this.uid = res.data.sub
                 this.email = res.data.email
                 this.picture = res.data.picture
                 this.firstName = res.data.given_name
@@ -63,8 +63,8 @@ export const useUserStore = defineStore('user', {
             }
         },
 
-        async checkIfUserExists(id) {
-            const docRef = doc(db, "users", id)
+        async checkIfUserExists(uid) {
+            const docRef = doc(db, "users", uid)
             const docSnap = await getDoc(docRef)
             return docSnap.exists()
         },
@@ -72,7 +72,7 @@ export const useUserStore = defineStore('user', {
         async saveUserDetails(res) {
             try {
                 await setDoc(doc(db, "users", res.data.sub), {
-                    sub: res.data.sub,
+                    uid: res.data.sub,
                     email: res.data.email,
                     picture: res.data.picture,
                     firstName: res.data.given_name,
@@ -83,8 +83,8 @@ export const useUserStore = defineStore('user', {
             }
         },
 
-        async getChatById(id) {
-            onSnapshot(doc(db, "chat", id), (doc) => {
+        async getChatById(uid) {
+            onSnapshot(doc(db, "chat", uid), (doc) => {
                 let res = []
                 res.push(doc.data())
                 this.currentChat = res
@@ -99,34 +99,34 @@ export const useUserStore = defineStore('user', {
                 querySnapshot.forEach(doc => {
                     let data = {
                         id: doc.id,
-                        sub1: doc.data().sub1,
-                        sub2: doc.data().sub2,
-                        sub1HasViewed: doc.data().sub1HasViewed,
-                        sub2HasViewed: doc.data().sub2HasViewed,
+                        uid1: doc.data().uid1,
+                        uid2: doc.data().uid2,
+                        user1HasViewed: doc.data().user1HasViewed,
+                        user2HasViewed: doc.data().user2HasViewed,
                         messages: doc.data().messages
                     }
 
-                    if (doc.data().sub1 === this.sub) chatArray.push(data)
-                    if (doc.data().sub2 === this.sub) chatArray.push(data)
+                    if (doc.data().uid1 === this.uid) chatArray.push(data)
+                    if (doc.data().uid2 === this.uid) chatArray.push(data)
 
                     this.removeUsersFromFindFriends = []
 
                     chatArray.forEach(chat => {
 
-                        if (this.sub === chat.sub1) {
+                        if (this.uid === chat.uid1) {
                             this.allUsers.forEach(user => {
-                                if (user.sub == chat.sub2) {
+                                if (user.uid == chat.uid2) {
                                     chat.user = user
-                                    this.removeUsersFromFindFriends.push(user.sub)
+                                    this.removeUsersFromFindFriends.push(user.uid)
                                 }
                             })
                         }
 
-                        if (this.sub === chat.sub2) {
+                        if (this.uid === chat.uid2) {
                             this.allUsers.forEach(user => {
-                                if (user.sub == chat.sub1) {
+                                if (user.uid == chat.uid1) {
                                     chat.user = user
-                                    this.removeUsersFromFindFriends.push(user.sub)
+                                    this.removeUsersFromFindFriends.push(user.uid)
                                 }
                             })
                         }
@@ -145,10 +145,10 @@ export const useUserStore = defineStore('user', {
             try {
                 if (data.chatId) {
                     await updateDoc(doc(db, `chat/${data.chatId}`), {
-                        sub1HasViewed: false,
-                        sub2HasViewed: false,
+                        user1HasViewed: false,
+                        user2HasViewed: false,
                         messages: arrayUnion({
-                            sub: this.sub,
+                            uid: this.uid,
                             message: data.message,
                             createdAt: Date.now()
                         })
@@ -156,13 +156,13 @@ export const useUserStore = defineStore('user', {
                 } else {
                     let id = uuid()
                     await setDoc(doc(db, `chat/${id}`), {
-                        sub1: this.sub,
-                        sub2: data.sub2,
-                        sub1HasViewed: false,
-                        sub2HasViewed: false,
+                        uid1: this.uid,
+                        uid2: data.uid2,
+                        user1HasViewed: false,
+                        user2HasViewed: false,
 
                         messages: [{
-                            sub: this.sub,
+                            uid: this.uid,
                             message: data.message,
                             createdAt: Date.now()
                         }]
@@ -185,7 +185,7 @@ export const useUserStore = defineStore('user', {
         },
 
         logout() {
-            this.sub = ''
+            this.uid = ''
             this.email = ''
             this.picture = ''
             this.firstName = ''

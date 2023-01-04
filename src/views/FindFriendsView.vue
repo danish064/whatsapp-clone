@@ -25,11 +25,11 @@ import { computed, ref } from 'vue'
 import { useUserStore } from "@/store/user-store";
 import { storeToRefs } from "pinia";
 const userStore = useUserStore()
-const { sub, userDataForChat, allUsers, removeUsersFromFindFriends } = storeToRefs(userStore)
+const { uid, userDataForChat, allUsers, removeUsersFromFindFriends } = storeToRefs(userStore)
 let users = ref([])
 
 const hideMe = (user) => {
-    if (user.sub === sub.value) {
+    if (user.uid === uid.value) {
         return false
     }
     return true
@@ -39,8 +39,8 @@ const createNewChat = (user) => {
     userDataForChat.value = []
     userDataForChat.value.push({
         id: '',
-        sub1: sub.value,
-        sub2: user.sub,
+        uid1: uid.value,
+        uid2: user.uid,
         firstName: user.firstName,
         picture: user.picture,
     })
@@ -49,7 +49,7 @@ const createNewChat = (user) => {
 const usersComputed = computed(() => {
     allUsers.value.forEach(user => users.value.push(user))
     removeUsersFromFindFriends.value.forEach(remove => {
-        let index = users.value.findIndex(user => user.sub === remove)
+        let index = users.value.findIndex(user => user.uid === remove)
         users.value.splice(index, 1)
     })
     return users.value
