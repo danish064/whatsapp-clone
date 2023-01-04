@@ -43,9 +43,9 @@ const openChat = async (chat) => {
         }
         if (chat.uid1 === uid.value) {
             data.val1 = true
-            data.val2 = true
+            data.val2 = false
         } else if (chat.uid2 === uid.value) {
-            data.val1 = true
+            data.val1 = false
             data.val2 = true
         }
         await userStore.hasReadMessage(data)

@@ -13,7 +13,7 @@
 
       <div class="bg-white rounded-md z-10 px-20 pt-10 pb-10 m-6 mt-10">
         <div>
-          <Signup v-if="showSignup" />
+          <Signup v-if="showSignup"/>
           <Login v-else @login="login" />
           <div class="pt-2">
             <div v-if="showSignup">
@@ -52,7 +52,7 @@ const login = (email, password) => {
 };
 
 const callback = async (response) => {
-  console.log(response);
+  // console.log(response);
   await userStore.getUserDetailsFromGoogle(response);
   setTimeout(() => {
     router.push('/');

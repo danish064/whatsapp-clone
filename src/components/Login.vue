@@ -45,19 +45,20 @@ const verifyPassword = () => {
   return password.value.length > 6;
 };
 const login = () => {
-  if (verifyEmail()) {
-    if (verifyPassword()) {
-      //   console.log('login');
-      //   console.log(email.value, password.value);
-      //   email.value = '';
-      //   password.value = '';
-      emit('login', email.value, password.value);
-    } else {
-      alert('Please enter a valid password');
-    }
-  } else {
-    alert('Please enter a valid email');
-  }
+  // if (verifyEmail()) {
+  //   if (verifyPassword()) {
+  //     //   console.log('login');
+  //     //   console.log(email.value, password.value);
+  //     //   email.value = '';
+  //     //   password.value = '';
+  //     emit('login', email.value, password.value);
+  //   } else {
+  //     alert('Please enter a valid password');
+  //   }
+  // } else {
+  //   alert('Please enter a valid email');
+  // }
+  
   //   setTimeout(() => {
   //     router.push('/');
   //   }, 200);
