@@ -55,12 +55,14 @@ const isActive = computed(() => {
 
 const tickColor = (chat) => {
   let color = ''
+  // #7DF9FF - READ
+  // #B5B5B5 - UNREAD
   if (chat.uid1 === uid.value) {
-    if (chat.user1HasViewed) color = '#7DF9FF'
+    if (chat.user2HasViewed) color = '#7DF9FF'
     else color = '#B5B5B5'
   }
   if (chat.uid2 === uid.value) {
-    if (chat.user2HasViewed) color = '#7DF9FF'
+    if (chat.user1HasViewed) color = '#7DF9FF'
     else color = '#B5B5B5'
   }
   return color
