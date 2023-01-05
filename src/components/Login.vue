@@ -1,14 +1,13 @@
 <template>
   <div>
-    <div class="text-center text-4xl text-gray-700 font-light pb-10">
-      Login
-    </div>
+    <div class="text-center text-4xl text-gray-700 font-light pb-10">Login</div>
     <div class="text-gray-700 font-light pb-2">Email</div>
     <input
       v-model="email"
       type="text"
       class="w-full border border-gray-300 rounded-md p-3"
       placeholder="Enter your email"
+      :class="{ 'border-red-500': !isEmailValid }"
     />
     <div class="text-gray-700 font-light pb-2 pt-4">Password</div>
     <input
@@ -16,6 +15,7 @@
       type="password"
       class="w-full border border-gray-300 rounded-md p-3"
       placeholder="Enter your password"
+      :class="{ 'border-red-500': !isPasswordValid }"
     />
     <button
       @click="login"
@@ -36,6 +36,9 @@ const router = useRouter();
 let email = ref('');
 let password = ref('');
 
+let isEmailValid = ref(false);
+let isPasswordValid = ref(false);
+
 const emailPattren = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 // const emailPattren = /[a-zA-Z]+@gmail\.[a-zA-Z]+/;
 const verifyEmail = () => {
@@ -44,7 +47,7 @@ const verifyEmail = () => {
 const verifyPassword = () => {
   return password.value.length > 6;
 };
-const login = () => {
+const login = async () => {
   // if (verifyEmail()) {
   //   if (verifyPassword()) {
   //     //   console.log('login');
@@ -58,9 +61,12 @@ const login = () => {
   // } else {
   //   alert('Please enter a valid email');
   // }
-  
+
   //   setTimeout(() => {
   //     router.push('/');
   //   }, 200);
+  console.log('login');
+  isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
+  // await userStore.authenticateUser();
 };
 </script>

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 import { db } from "@/firebase-init";
+// import { collection, query, where, getDocs } from "firebase/firestore";
 import {
   setDoc,
   getDoc,
@@ -12,6 +13,7 @@ import {
   arrayUnion,
   onSnapshot,
   query,
+  where
 } from "firebase/firestore";
 
 axios.defaults.baseURL = "http://localhost:4001/";
@@ -38,7 +40,9 @@ export const useUserStore = defineStore("user", {
         });
         // console.log(res);
         let userExists = await this.checkIfGoogleUserExists(res.data.sub);
-        if (!userExists) await this.saveUserDetails(res);
+        // if(!userExists) console.log("User does not exist");
+        console.log("User", userExists ? "exists" : "Does not exists")
+        if (!userExists) await this.saveUserDetails(res, true);
 
         await this.getAllUsers();
 
@@ -51,7 +55,22 @@ export const useUserStore = defineStore("user", {
         console.log(error);
       }
     },
-    async authenticateUser() {},
+    async authenticateUser(email = "danish@gmail.com", password = "1234") {
+      console.log("Authenticating user");
+
+      const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        if (doc.data().email === email && doc.data().password === password) {
+          console.log("User exists");
+          return true;
+        } else {
+          console.log("User does not exist");
+          return false;
+        }
+      });
+
+    },
     async getAllUsers() {
       const querySnapshot = await getDocs(collection(db, "users"));
       let results = [];
@@ -73,33 +92,28 @@ export const useUserStore = defineStore("user", {
       return docSnap.exists();
     },
     async checkIfNormalUserExists(email) {
-    const docRef = doc(db, "users", email);
-    const docSnap = await getDoc(docRef);
-    // console.log(docSnap);
-    return docSnap.exists();
-        //   const querySnapshot = await getDocs(collection(db, "users"));
-    //   let results = [];
-    //   querySnapshot.forEach((doc) => {
-    //     results.push(doc.data());
-    //   });
+      // const docRef = doc(db, "users", email);
+      // const docSnap = await getDoc(docRef);
+      // // console.log(docSnap);
+      // return docSnap.exists();
 
-    //   if (results.length) {
-    //     let userExists = false;
-    //     // results.forEach((res) => {
-    //     // if (res.email === email) userExists = true;
-    //     // });
-    //     // return userExists;
-    //     results.forEach((res) => {
-    //       if (res.email === email) return true;
-    //     });
-    //   }
-    //   return false;
-    //   // const docRef = doc(db, "users", email);
+      const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        if (doc.data().email === email) {
+          // console.log("User exists");
+          return true;
+        } else {
+          // console.log("User does not exist");
+          return false;
+        }
+      });
     },
 
-    async saveUserDetails(userData) {
-      // console.log(userData);
-      if ("data" in userData) {
+    async saveUserDetails(userData, isGoogleUser) {
+      console.log(userData);
+      // if ("data" in userData) {
+      if (isGoogleUser) {
         console.log("Creating google user!");
         try {
           await setDoc(doc(db, "users", userData.data.sub), {
@@ -107,9 +121,9 @@ export const useUserStore = defineStore("user", {
             email: userData.data.email,
             picture: userData.data.picture,
             firstName: userData.data.given_name,
-            lastName: userData.data.family_name,
+            lastName: userData.data.family_name ? userData.data.family_name : "",
             isGoogleUser: true,
-            password: null,
+            password: "",
           });
         } catch (error) {
           console.log(error);
