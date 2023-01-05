@@ -62,11 +62,11 @@ const login = async () => {
   //   alert('Please enter a valid email');
   // }
 
-  //   setTimeout(() => {
-  //     router.push('/');
-  //   }, 200);
   console.log('login');
-  isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
-  // await userStore.authenticateUser();
+  // isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
+  await userStore.authenticateUser();
+  setTimeout(() => {
+    router.push('/');
+  }, 200);
 };
 </script>

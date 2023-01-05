@@ -59,13 +59,19 @@ export const useUserStore = defineStore("user", {
       console.log("Authenticating user");
 
       const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        if (doc.data().email === email && doc.data().password === password) {
-          console.log("User exists");
+      querySnapshot.forEach(async (doc) => {
+        // console.log(doc.data());
+        if (doc.data().password === password) {
+          // console.log("User exists");
+          this.uid = doc.data().uid;
+          this.email = doc.data().email;
+          this.picture = doc.data().picture;
+          this.firstName = doc.data().firstName;
+          this.lastName = doc.data().lastName;
+          await this.getAllUsers();
           return true;
         } else {
-          console.log("User does not exist");
+          // console.log("User does not exist");
           return false;
         }
       });
@@ -98,16 +104,23 @@ export const useUserStore = defineStore("user", {
       // return docSnap.exists();
 
       const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        if (doc.data().email === email) {
-          // console.log("User exists");
-          return true;
-        } else {
-          // console.log("User does not exist");
-          return false;
-        }
-      });
+      if (querySnapshot.empty) {
+        // console.log("User does not exist");
+        return false;
+      };
+      // console.log("User exists");
+      return true;
+      console.log(querySnapshot[0].data())
+      // querySnapshot.forEach((doc) => {
+      //   console.log(doc.data());
+      //   if (doc.data().email === email) {
+      //     console.log("User exists");
+      //     return true;
+      //   } else {
+      //     console.log("User does not exist");
+      //     return false;
+      //   }
+      // });
     },
 
     async saveUserDetails(userData, isGoogleUser) {
