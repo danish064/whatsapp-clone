@@ -36,8 +36,8 @@ const router = useRouter();
 let email = ref('');
 let password = ref('');
 
-let isEmailValid = ref(false);
-let isPasswordValid = ref(false);
+let isEmailValid = ref(true);
+let isPasswordValid = ref(true);
 
 const emailPattren = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 // const emailPattren = /[a-zA-Z]+@gmail\.[a-zA-Z]+/;
@@ -61,26 +61,28 @@ const login = async () => {
   // } else {
   //   alert('Please enter a valid email');
   // }
-
-  console.log('login');
-  // isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
+    isEmailValid.value = true;
+    isPasswordValid.value = true;
+  // console.log('login');
   if (email.value === '' || password.value === '') {
     alert('Please enter email and password');
     return;
   }
-
-  let loginSuccess = await userStore.authenticateUser(
-    email.value,
-    password.value
-  );
-  // console.log(loginSuccess);
-  if (loginSuccess) {
-    // alert('Login success');
-    setTimeout(() => {
-      router.push('/');
-    }, 200);
+  isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
+  if (isEmailValid.value) {
+    isPasswordValid.value = await userStore.authenticateUser(
+      email.value,
+      password.value
+    );
+    if (isPasswordValid.value) {
+      setTimeout(() => {
+        router.push('/');
+      }, 200);
+    } else {
+      alert('Invalid password');
+    }
   } else {
-    alert('Invalid credentials');
+    alert('User does not exist, Please register');
   }
 };
 </script>
