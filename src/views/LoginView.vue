@@ -13,7 +13,7 @@
 
       <div class="bg-white rounded-md z-10 px-20 pt-10 pb-10 m-6 mt-10">
         <div>
-          <Signup v-if="showSignup"/>
+          <Signup v-if="showSignup" />
           <Login v-else @login="login" />
           <div class="pt-2">
             <div v-if="showSignup">
@@ -24,6 +24,9 @@
               Dont have an account?
               <span @click="showSignup = true">Signup</span>
             </div>
+          </div>
+          <div v-if="userStore.uid !== ''" class="mt-2 flex justify-center">
+            <button class="px-4 py-1 border" @click="userStore.logout">Clear state</button>
           </div>
           <div class="text-gray-700 font-light pb-2 pt-4 my-2 text-center">
             or continue with google

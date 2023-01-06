@@ -55,9 +55,9 @@ export const useUserStore = defineStore("user", {
         console.log(error);
       }
     },
-    async authenticateUser(email = "danish@gmail.com", password = "1234") {
+    async authenticateUser(email, password) {
       console.log("Authenticating user");
-
+      let loginStatus = false;
       const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
       querySnapshot.forEach(async (doc) => {
         // console.log(doc.data());
@@ -68,14 +68,16 @@ export const useUserStore = defineStore("user", {
           this.picture = doc.data().picture;
           this.firstName = doc.data().firstName;
           this.lastName = doc.data().lastName;
+          console.log("login successful");
+          loginStatus = true;
           await this.getAllUsers();
-          return true;
         } else {
           // console.log("User does not exist");
-          return false;
+          console.log("Invalid credentials");
+          loginStatus = false;
         }
       });
-
+      return loginStatus;
     },
     async getAllUsers() {
       const querySnapshot = await getDocs(collection(db, "users"));

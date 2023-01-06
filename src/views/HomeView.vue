@@ -9,8 +9,14 @@
           :src="userStore.picture || ''"
           alt=""
         />
+        <div>{{ userStore.firstName }} {{ userStore?.lastName }}</div>
         <div class="flex items-center justify-center">
-          <AccountGroupIcon fillColor="#515151" class="mr-6" />
+          <!-- fillColor="#515151" -->
+          <AccountGroupIcon
+            :fillColor="userStore.showFindFriends ? '#59900' : '#515151'"
+            @click="userStore.showFindFriends = !userStore.showFindFriends"
+            class="mr-6"
+          />
           <DotsVerticalIcon
             @click="logout"
             fillColor="#515151"
@@ -18,7 +24,6 @@
           />
         </div>
       </div>
-
       <div id="Search" class="bg-white w-full px-2 border-b shadow-sm">
         <div
           class="px-1 m-2 bg-[#F0F0F0] flex items-center justify-center rounded-md"
@@ -34,7 +39,6 @@
         </div>
       </div>
     </div>
-
     <div v-if="showFindFriends">
       <FindFriendsView class="pt-28" />
     </div>

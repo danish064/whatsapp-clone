@@ -64,9 +64,23 @@ const login = async () => {
 
   console.log('login');
   // isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
-  await userStore.authenticateUser();
-  setTimeout(() => {
-    router.push('/');
-  }, 200);
+  if (email.value === '' || password.value === '') {
+    alert('Please enter email and password');
+    return;
+  }
+
+  let loginSuccess = await userStore.authenticateUser(
+    email.value,
+    password.value
+  );
+  // console.log(loginSuccess);
+  if (loginSuccess) {
+    // alert('Login success');
+    setTimeout(() => {
+      router.push('/');
+    }, 200);
+  } else {
+    alert('Invalid credentials');
+  }
 };
 </script>
