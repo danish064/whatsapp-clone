@@ -41,7 +41,7 @@ export const useUserStore = defineStore("user", {
         // console.log(res);
         let userExists = await this.checkIfGoogleUserExists(res.data.sub);
         // if(!userExists) console.log("User does not exist");
-        console.log("User", userExists ? "exists" : "Does not exists")
+        // console.log("User", userExists ? "exists" : "Does not exists")
         if (!userExists) await this.saveUserDetails(res, true);
 
         await this.getAllUsers();
@@ -56,7 +56,7 @@ export const useUserStore = defineStore("user", {
       }
     },
     async authenticateUser(email, password) {
-      console.log("Authenticating user");
+      // console.log("Authenticating user");
       let loginStatus = false;
       const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
       querySnapshot.forEach(async (doc) => {
@@ -68,12 +68,12 @@ export const useUserStore = defineStore("user", {
           this.picture = doc.data().picture;
           this.firstName = doc.data().firstName;
           this.lastName = doc.data().lastName;
-          console.log("login successful");
+          // console.log("login successful");
           loginStatus = true;
           await this.getAllUsers();
         } else {
           // console.log("User does not exist");
-          console.log("Invalid credentials");
+          // console.log("Invalid credentials");
           loginStatus = false;
         }
       });
@@ -129,7 +129,7 @@ export const useUserStore = defineStore("user", {
       console.log(userData);
       // if ("data" in userData) {
       if (isGoogleUser) {
-        console.log("Creating google user!");
+        // console.log("Creating google user!");
         try {
           await setDoc(doc(db, "users", userData.data.sub), {
             uid: userData.data.sub,
@@ -141,12 +141,12 @@ export const useUserStore = defineStore("user", {
             password: "",
           });
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         // Save details of normal user
         // console.log("Data does not exist in res");
-        console.log("Creating normal user!");
+        // console.log("Creating normal user!");
         const newUid = uuid();
         try {
           await setDoc(doc(db, "users", newUid), {

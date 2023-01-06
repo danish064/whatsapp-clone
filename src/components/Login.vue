@@ -48,21 +48,8 @@ const verifyPassword = () => {
   return password.value.length > 6;
 };
 const login = async () => {
-  // if (verifyEmail()) {
-  //   if (verifyPassword()) {
-  //     //   console.log('login');
-  //     //   console.log(email.value, password.value);
-  //     //   email.value = '';
-  //     //   password.value = '';
-  //     emit('login', email.value, password.value);
-  //   } else {
-  //     alert('Please enter a valid password');
-  //   }
-  // } else {
-  //   alert('Please enter a valid email');
-  // }
-    isEmailValid.value = true;
-    isPasswordValid.value = true;
+  isEmailValid.value = true;
+  isPasswordValid.value = true;
   // console.log('login');
   if (email.value === '' || password.value === '') {
     alert('Please enter email and password');
