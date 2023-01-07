@@ -2,10 +2,10 @@
   <div class="flex">
     <div id="Header" class="fixed w-[420px] z-10">
       <div
-        class="bg-[#F0F0F0] w-full flex justify-between items-center px-3 py-2"
+        class="bg-[#F0F0F0] w-full flex justify-between items-center px-3 py-3"
       >
         <img
-          class="rounded-full ml-1 w-10"
+          class="rounded-full ml-1 w-10 h-10"
           :src="userStore.picture || ''"
           alt=""
         />
