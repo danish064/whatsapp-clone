@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/store/user-store';
-import MessageRowComponent from '@/components/MessageRowComponent.vue';
-import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { useUserStore } from "@/store/user-store";
+import MessageRowComponent from "@/components/MessageRowComponent.vue";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 const userStore = useUserStore();
 const { chats, userDataForChat, uid } = storeToRefs(userStore);
 
@@ -27,6 +27,8 @@ onMounted(async () => {
 });
 
 const openChat = async (chat) => {
+  if (userDataForChat.value.id == chat.id) return;
+
   userDataForChat.value = [];
   userDataForChat.value.push({
     id: chat.id,
@@ -39,17 +41,15 @@ const openChat = async (chat) => {
     await userStore.getChatById(chat.id);
     let data = {
       id: chat.id,
-      key1: 'user1HasViewed',
-      val1: false,
-      key2: 'user2HasViewed',
-      val2: false,
+      user1HasViewed: false,
+      user2HasViewed: false,
     };
     if (chat.uid1 === uid.value) {
-      data.val1 = true;
-      data.val2 = false;
+      data.user1HasViewed = true;
+      data.user2HasViewed = false;
     } else if (chat.uid2 === uid.value) {
-      data.val1 = false;
-      data.val2 = true;
+      data.user1HasViewed = false;
+      data.user2HasViewed = true;
     }
     await userStore.hasReadMessage(data);
   } catch (error) {
