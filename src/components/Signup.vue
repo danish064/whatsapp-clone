@@ -71,41 +71,45 @@ const verifyPassword = () => {
   return password.value.length > 6;
 };
 const signup = async () => {
-  // if (verifyEmail()) {
-  //   if (verifyPassword()) {
-  //     //   console.log('login');
-  //     //   console.log(email.value, password.value);
-  //     //   email.value = '';
-  //     //   password.value = '';
-  //     emit("signup", email.value, password.value);
-  //   } else {
-  //     alert("Please enter a valid password");
-  //   }
-  // } else {
-  //   alert("Please enter a valid email");
-  // }
-  // //   setTimeout(() => {
-  // //     router.push('/');
-  // //   }, 200);
-
-  // emit("signup", {
-  //   email: email.value,
-  //   password: password.value,
-  //   firstName: firstName.value,
-  //   lastName: lastName.value,
-  // });
-
-  // if (await userStore.checkIfNormalUserExists(email.value)) {
-  //   alert("User already exists");
-  //   return;
-  // } else {
-  //   alert("User created");
-  userStore.saveUserDetails({
-    email: email.value,
-    password: password.value,
-    firstName: firstName.value,
-    lastName: lastName.value,
-  });
-  // }
+  if (
+    email.value === "" ||
+    password.value === "" ||
+    firstName.value === "" ||
+    lastName.value === "" ||
+    confirmPassword.value === ""
+  ) {
+    alert("Please fill all the fields");
+    return;
+  }
+  if (password.value !== confirmPassword.value) {
+    alert("Passwords don't match");
+    return;
+  }
+  if (verifyEmail()) {
+    if (await userStore.checkIfNormalUserExists(email.value)) {
+      alert("User already exists");
+      return;
+    } else {
+      let userCreated = false;
+      userCreated = await userStore.saveUserDetails(
+        {
+          email: email.value,
+          password: password.value,
+          firstName: firstName.value,
+          lastName: lastName.value,
+        },
+        false
+      );
+      if (userCreated) {
+        alert("Signup successful");
+        router.push("/login");
+      } else {
+        alert("Signup failed");
+      }
+    }
+  } else {
+    alert("Please enter a valid email");
+    return;
+  }
 };
 </script>

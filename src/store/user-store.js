@@ -13,7 +13,7 @@ import {
   arrayUnion,
   onSnapshot,
   query,
-  where
+  where,
 } from "firebase/firestore";
 
 axios.defaults.baseURL = "http://localhost:4001/";
@@ -58,7 +58,9 @@ export const useUserStore = defineStore("user", {
     async authenticateUser(email, password) {
       // console.log("Authenticating user");
       let loginStatus = false;
-      const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
+      const querySnapshot = await getDocs(
+        query(collection(db, "users"), where("email", "==", email))
+      );
       querySnapshot.forEach(async (doc) => {
         // console.log(doc.data());
         if (doc.data().password === password) {
@@ -105,14 +107,16 @@ export const useUserStore = defineStore("user", {
       // // console.log(docSnap);
       // return docSnap.exists();
 
-      const querySnapshot = await getDocs(query(collection(db, "users"), where("email", "==", email)));
+      const querySnapshot = await getDocs(
+        query(collection(db, "users"), where("email", "==", email))
+      );
       if (querySnapshot.empty) {
         // console.log("User does not exist");
         return false;
-      };
+      }
       // console.log("User exists");
       return true;
-      console.log(querySnapshot[0].data())
+      console.log(querySnapshot[0].data());
       // querySnapshot.forEach((doc) => {
       //   console.log(doc.data());
       //   if (doc.data().email === email) {
@@ -126,7 +130,7 @@ export const useUserStore = defineStore("user", {
     },
 
     async saveUserDetails(userData, isGoogleUser) {
-      console.log(userData);
+      // console.log(userData);
       // if ("data" in userData) {
       if (isGoogleUser) {
         // console.log("Creating google user!");
@@ -136,7 +140,9 @@ export const useUserStore = defineStore("user", {
             email: userData.data.email,
             picture: userData.data.picture,
             firstName: userData.data.given_name,
-            lastName: userData.data.family_name ? userData.data.family_name : "",
+            lastName: userData.data.family_name
+              ? userData.data.family_name
+              : "",
             isGoogleUser: true,
             password: "",
           });
@@ -149,6 +155,7 @@ export const useUserStore = defineStore("user", {
         // console.log("Creating normal user!");
         const newUid = uuid();
         try {
+          // console.log("Creating normal user!");
           await setDoc(doc(db, "users", newUid), {
             uid: newUid,
             email: userData.email,
@@ -158,6 +165,8 @@ export const useUserStore = defineStore("user", {
             isGoogleUser: false,
             password: userData.password,
           });
+          // console.log("User created successfully");
+          return true;
         } catch (error) {
           console.log(error);
         }
