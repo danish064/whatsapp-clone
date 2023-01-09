@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import PageNotFound from '@/views/PageNotFound.vue'
-import { useUserStore } from "../store/user-store";
+// import HomeView from '@/views/HomeView.vue'
+import HomePage from '@/pages/HomePage.vue'
+import Login from '@/pages/Login.vue'
+import PageNotFound from '@/pages/PageNotFound.vue'
+import { useUserStore } from "@/store/user-store";
 const routes = [
   {
     path: "/",
-    component: HomeView,
+    component: HomePage,
   },
   {
     path: "/login",
-    component: LoginView,
+    component: Login,
   },
   {
     // path: '/:garbage',

@@ -69,25 +69,25 @@
 </template>
 
 <script setup>
-import DotsVerticalIcon from "vue-material-design-icons/DotsVertical.vue";
-import EmoticonExcitedOutlineIcon from "vue-material-design-icons/EmoticonExcitedOutline.vue";
-import PaperclipIcon from "vue-material-design-icons/Paperclip.vue";
-import SendIcon from "vue-material-design-icons/Send.vue";
-import { ref, watch } from "vue";
-import Message from "../components/Message.vue";
-import { useUserStore } from "../store/user-store";
-import { storeToRefs } from "pinia";
+import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
+import EmoticonExcitedOutlineIcon from 'vue-material-design-icons/EmoticonExcitedOutline.vue';
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue';
+import SendIcon from 'vue-material-design-icons/Send.vue';
+import { ref, watch } from 'vue';
+import Message from '@/components/Message.vue';
+import { useUserStore } from '@/store/user-store';
+import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const { userDataForChat, currentChat, uid } = storeToRefs(userStore);
 
 let disableBtn = ref(false);
-let message = ref("");
+let message = ref('');
 watch(
   () => currentChat.value,
   (chat) => {
     if (chat.length) {
       setTimeout(() => {
-        let objDiv = document.getElementById("MessagesSection");
+        let objDiv = document.getElementById('MessagesSection');
         objDiv.scrollTop = objDiv.scrollHeight;
       }, 50);
     }
@@ -96,7 +96,7 @@ watch(
 );
 
 const sendMessage = async () => {
-  if (message.value === "") return;
+  if (message.value === '') return;
   disableBtn.value = true;
 
   await userStore.sendMessage({
@@ -104,7 +104,7 @@ const sendMessage = async () => {
     uid2: userDataForChat.value[0].uid2,
     chatId: userDataForChat.value[0].id,
   });
-  message.value = "";
+  message.value = '';
 
   // const userData = userDataForChat.value[0];
 
@@ -122,7 +122,7 @@ const sendMessage = async () => {
   // }
   // await userStore.hasReadMessage(data);
 
-  let objDiv = document.getElementById("MessagesSection");
+  let objDiv = document.getElementById('MessagesSection');
   objDiv.scrollTop = objDiv.scrollHeight;
 
   disableBtn.value = false;
@@ -131,7 +131,7 @@ const sendMessage = async () => {
 
 <style>
 #BG {
-  background: url("/message-bg.png") repeat-x center;
+  background: url('/message-bg.png') repeat-x center;
   width: 100%;
   height: 100%;
   position: fixed;
