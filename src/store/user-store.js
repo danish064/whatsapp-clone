@@ -233,8 +233,8 @@ export const useUserStore = defineStore("user", {
       try {
         if (data.chatId) {
           await updateDoc(doc(db, `chat/${data.chatId}`), {
-            // user1HasViewed: false,
-            // user2HasViewed: false,
+            user1HasViewed: false,
+            user2HasViewed: false,
             messages: arrayUnion({
               uid: this.uid,
               message: data.message,
@@ -270,8 +270,8 @@ export const useUserStore = defineStore("user", {
       await updateDoc(
         doc(db, `chat/${data.id}`),
         {
-          user1HasViewed: data.val1,
-          user2HasViewed: data.val2,
+          user1HasViewed: data.user1HasViewed,
+          user2HasViewed: data.user2HasViewed,
         },
         { merge: true }
       );

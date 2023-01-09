@@ -106,21 +106,21 @@ const sendMessage = async () => {
   });
   message.value = "";
 
-  const userData = userDataForChat.value[0];
+  // const userData = userDataForChat.value[0];
 
-  let data = {
-    id: userData.id,
-    user1HasViewed: false,
-    user2HasViewed: false,
-  };
-  if (userData.uid1 === uid.value) {
-    data.user1HasViewed = true;
-    data.user2HasViewed = false;
-  } else if (userData.uid2 === uid.value) {
-    data.user1HasViewed = false;
-    data.user2HasViewed = true;
-  }
-  await userStore.hasReadMessage(data);
+  // let data = {
+  //   id: userData.id,
+  //   user1HasViewed: false,
+  //   user2HasViewed: false,
+  // };
+  // if (userData.uid1 === uid.value) {
+  //   data.user1HasViewed = true;
+  //   data.user2HasViewed = false;
+  // } else if (userData.uid2 === uid.value) {
+  //   data.user1HasViewed = false;
+  //   data.user2HasViewed = true;
+  // }
+  // await userStore.hasReadMessage(data);
 
   let objDiv = document.getElementById("MessagesSection");
   objDiv.scrollTop = objDiv.scrollHeight;

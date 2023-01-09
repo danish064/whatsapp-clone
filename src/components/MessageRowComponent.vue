@@ -34,11 +34,11 @@
 </template>
 
 <script setup>
-import CheckAllIcon from "vue-material-design-icons/CheckAll.vue";
-import { toRefs, computed } from "vue";
-import moment from "moment";
-import { useUserStore } from "../store/user-store";
-import { storeToRefs } from "pinia";
+import CheckAllIcon from 'vue-material-design-icons/CheckAll.vue';
+import { toRefs, computed } from 'vue';
+import moment from 'moment';
+import { useUserStore } from '../store/user-store';
+import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
 const { uid, userDataForChat } = storeToRefs(userStore);
 
@@ -58,7 +58,7 @@ const isActive = computed(() => {
 });
 
 const tickColor = (chat) => {
-  let color = "";
+  let color = '';
   // #7DF9FF - READ
   // #B5B5B5 - UNREAD
 
@@ -76,21 +76,22 @@ const tickColor = (chat) => {
 
   if (chat.messages.length) {
     // If the user is the sender
-    if (chat.messages[chat.messages.length - 1].uid === uid.value) {
-      if (chat.user2HasViewed) {
-        color = "#7DF9FF";
-      } else {
-        color = "#B5B5B5";
-      }
+    // if (chat.messages[chat.messages.length - 1].uid === uid.value) {
+    if (chat.user2HasViewed) {
+      color = '#7DF9FF';
+    } else {
+      color = '#B5B5B5';
     }
+    // }
     // If the user is the receiver
-    else {
-      if (chat.user1HasViewed) {
-        color = "#7DF9FF";
-      } else {
-        color = "#B5B5B5";
-      }
-    }
+    // else {
+    //   if (chat.user1HasViewed) {
+    //     color = "#7DF9FF";
+    //   } else {
+    //     color = "#B5B5B5";
+    //   }
+    // }
+    return color;
   }
 };
 
@@ -101,7 +102,7 @@ const lastChatMessage = (chat) => {
 const lastCreatedAt = (chat) => {
   if (chat.messages.length) {
     return moment(chat.messages[chat.messages.length - 1].createdAt).format(
-      "MMM D YY | HH:MM A"
+      'MMM D YY | HH:MM A'
     );
   }
 };
