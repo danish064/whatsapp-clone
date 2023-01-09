@@ -132,55 +132,56 @@ export const useUserStore = defineStore("user", {
     async saveUserDetails(userData, isGoogleUser) {
       // console.log(userData);
       // if ("data" in userData) {
+      let newUserData = {
+        uid: "",
+        email: "",
+        picture: "",
+        firstName: "",
+        lastName: "",
+        isGoogleUser: false,
+        password: "",
+        lastSeen: new Date(),
+      };
       if (isGoogleUser) {
         // console.log("Creating google user!");
-        try {
-          await setDoc(doc(db, "users", userData.data.sub), {
-            uid: userData.data.sub,
-            email: userData.data.email,
-            picture: userData.data.picture,
-            firstName: userData.data.given_name,
-            lastName: userData.data.family_name
-              ? userData.data.family_name
-              : "",
-            isGoogleUser: true,
-            password: "",
-          });
-        } catch (error) {
-          // console.log(error);
-        }
+        newUserData.uid = userData.data.sub;
+        newUserData.email = userData.data.email;
+        newUserData.picture = userData.data.picture;
+        newUserData.firstName = userData.data.given_name;
+        newUserData.lastName = userData.data.family_name
+          ? userData.data.family_name
+          : "";
+        newUserData.isGoogleUser = true;
+        password = "";
       } else {
         // Save details of normal user
-        // console.log("Data does not exist in res");
-        // console.log("Creating normal user!");
-        const newUid = uuid();
-        try {
-          // console.log("Creating normal user!");
-          await setDoc(doc(db, "users", newUid), {
-            uid: newUid,
-            email: userData.email,
-            picture: "/user-profile-default.png",
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            isGoogleUser: false,
-            password: userData.password,
-          });
-          // console.log("User created successfully");
-          return true;
-        } catch (error) {
-          console.log(error);
-        }
+        newUserData.uid = uuid();
+        newUserData.email = userData.email;
+        newUserData.picture = userData.picture;
+        newUserData.firstName = userData.firstName;
+        newUserData.lastName = userData.lastName;
+        newUserData.isGoogleUser = false;
+        newUserData.password = userData.password;
+      }
+      try {
+        await setDoc(doc(db, "users", newUserData.uid), newUserData);
+        return true;
+      } catch (error) {
+        console.log(error);
       }
     },
 
     async getChatById(uid) {
-      onSnapshot(doc(db, "chat", uid), (doc) => {
+      // This function gets chat in real time
+      const chatDoc = doc(db, "chat", uid);
+      const onNextSnapshotCallback = (doc) => {
         let res = [];
         res.push(doc.data());
         this.currentChat = res;
-      });
+      };
+      const unsub = onSnapshot(chatDoc, onNextSnapshotCallback);
+      //   return unsub;
     },
-
     getAllChatsByUser() {
       const q = query(collection(db, "chat"));
 
@@ -267,14 +268,18 @@ export const useUserStore = defineStore("user", {
     },
 
     async hasReadMessage(data) {
-      await updateDoc(
-        doc(db, `chat/${data.id}`),
-        {
-          user1HasViewed: data.user1HasViewed,
-          user2HasViewed: data.user2HasViewed,
-        },
-        { merge: true }
-      );
+      try {
+        await updateDoc(
+          doc(db, `chat/${data.id}`),
+          {
+            user1HasViewed: data.user1HasViewed,
+            user2HasViewed: data.user2HasViewed,
+          },
+          { merge: true }
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     logout() {
