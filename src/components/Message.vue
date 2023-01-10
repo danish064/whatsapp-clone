@@ -1,14 +1,13 @@
 <template>
-  <!-- {{ message }} - {{ isSentMessage }} -->
   <div v-if="!isSentMessage" class="flex w-[calc(100%-50px)]">
     <div class="inline-block bg-white p-2 rounded-md my-1">
       {{ message.message }}
 
-      <span class="text-xs text-end pl-2 text-gray-400 ">
+      <span class="text-xs text-end pl-2 text-gray-400">
         {{
-          new Date(message.createdAt).toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
+          new Date(message.createdAt).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
             hour12: true,
           })
         }}
@@ -25,9 +24,9 @@
 
       <span class="text-xs pl-2 text-gray-400">
         {{
-          new Date(message.createdAt).toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
+          new Date(message.createdAt).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
             hour12: true,
           })
         }}
