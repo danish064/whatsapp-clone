@@ -86,7 +86,7 @@ const signup = async () => {
     return;
   }
   if (verifyEmail()) {
-    if (await userStore.checkIfNormalUserExists(email.value)) {
+    if (await userStore.checkIfUserExists(email.value)) {
       alert("User already exists");
       return;
     } else {

@@ -34,24 +34,21 @@
             or continue with google
           </div>
         </div>
-        <div class="w-full flex justify-center bg-[#191919] p-3 rounded-md">
-          <GoogleLogin :callback="callback" />
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Login from "@/components/Login.vue";
-import Signup from "@/components/Signup.vue";
-import { useUserStore } from "@/store/user-store";
-import { useRouter } from "vue-router";
-import { ref, onMounted, computed } from "vue";
+import Login from '@/components/Login.vue';
+import Signup from '@/components/Signup.vue';
+import { useUserStore } from '@/store/user-store';
+import { useRouter } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 const userStore = useUserStore();
 const router = useRouter();
 const showSignup = computed(() => {
-  return "signup" in router.currentRoute.value.query;
+  return 'signup' in router.currentRoute.value.query;
 });
 const handleSignupChange = (signupState) => {
   if (signupState) {
@@ -69,14 +66,6 @@ const handleSignupChange = (signupState) => {
 };
 const login = (email, password) => {
   console.log(email, password);
-};
-
-const callback = async (response) => {
-  // console.log(response);
-  await userStore.getUserDetailsFromGoogle(response);
-  setTimeout(() => {
-    router.push("/");
-  }, 200);
 };
 </script>
 

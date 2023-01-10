@@ -33,28 +33,6 @@ export const useUserStore = defineStore("user", {
     removeUsersFromFindFriends: [],
   }),
   actions: {
-    async getUserDetailsFromGoogle(data) {
-      try {
-        let res = await axios.post("api/google-login", {
-          token: data.credential,
-        });
-        // console.log(res);
-        let userExists = await this.checkIfGoogleUserExists(res.data.sub);
-        // if(!userExists) console.log("User does not exist");
-        // console.log("User", userExists ? "exists" : "Does not exists")
-        if (!userExists) await this.saveUserDetails(res, true);
-
-        await this.getAllUsers();
-
-        this.uid = res.data.sub;
-        this.email = res.data.email;
-        this.picture = res.data.picture;
-        this.firstName = res.data.given_name;
-        this.lastName = res.data.family_name;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async authenticateUser(email, password) {
       // console.log("Authenticating user");
       let loginStatus = false;
@@ -95,13 +73,7 @@ export const useUserStore = defineStore("user", {
         });
       }
     },
-
-    async checkIfGoogleUserExists(uid) {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      return docSnap.exists();
-    },
-    async checkIfNormalUserExists(email) {
+    async checkIfUserExists(email) {
       // const docRef = doc(db, "users", email);
       // const docSnap = await getDoc(docRef);
       // // console.log(docSnap);
@@ -129,7 +101,7 @@ export const useUserStore = defineStore("user", {
       // });
     },
 
-    async saveUserDetails(userData, isGoogleUser) {
+    async saveUserDetails(userData) {
       // console.log(userData);
       // if ("data" in userData) {
       let newUserData = {
@@ -138,31 +110,16 @@ export const useUserStore = defineStore("user", {
         picture: "",
         firstName: "",
         lastName: "",
-        isGoogleUser: false,
         password: "",
         lastSeen: new Date(),
       };
-      if (isGoogleUser) {
-        // console.log("Creating google user!");
-        newUserData.uid = userData.data.sub;
-        newUserData.email = userData.data.email;
-        newUserData.picture = userData.data.picture;
-        newUserData.firstName = userData.data.given_name;
-        newUserData.lastName = userData.data.family_name
-          ? userData.data.family_name
-          : "";
-        newUserData.isGoogleUser = true;
-        password = "";
-      } else {
-        // Save details of normal user
-        newUserData.uid = uuid();
-        newUserData.email = userData.email;
-        newUserData.picture = userData.picture;
-        newUserData.firstName = userData.firstName;
-        newUserData.lastName = userData.lastName;
-        newUserData.isGoogleUser = false;
-        newUserData.password = userData.password;
-      }
+      // Save details of normal user
+      newUserData.uid = uuid();
+      newUserData.email = userData.email;
+      newUserData.picture = userData.picture;
+      newUserData.firstName = userData.firstName;
+      newUserData.lastName = userData.lastName;
+      newUserData.password = userData.password;
       try {
         await setDoc(doc(db, "users", newUserData.uid), newUserData);
         return true;

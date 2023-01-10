@@ -55,7 +55,7 @@ const login = async () => {
     alert('Please enter email and password');
     return;
   }
-  isEmailValid.value = await userStore.checkIfNormalUserExists(email.value);
+  isEmailValid.value = await userStore.checkIfUserExists(email.value);
   if (isEmailValid.value) {
     isPasswordValid.value = await userStore.authenticateUser(
       email.value,
