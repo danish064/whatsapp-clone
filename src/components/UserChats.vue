@@ -1,22 +1,29 @@
 <template>
-  <div
-    id="Messages"
-    class="pt-1 z-0 overflow-auto fixed h-[calc(100vh-100px)] w-[420px]"
-  >
-    <div class="px-5 py-2 text-gray-400">Chats</div>
-    <div v-for="chat in chats" :key="chat">
-      <div @click="openChat(chat)">
-        <MessageRowComponent :chat="chat" />
-      </div>
+  <div class="pt-1 overflow-auto">
+    <div class="flex justify-between items-center px-5 py-2">
+      <div class="text-gray-400">Chats</div>
+      <span
+        @click="
+          () => {
+            userStore.userDataForChat = [];
+            userStore.currentChat = [];
+          }
+        "
+        class="text-slate-400 hover:text-slate-700 cursor-pointer"
+        >X</span
+      >
+    </div>
+    <div v-for="chat in chats" :key="chat" @click="openChat(chat)">
+      <MessageRowComponent :chat="chat" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { useUserStore } from "@/store/user-store";
-import MessageRowComponent from "@/components/MessageRowComponent.vue";
-import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { useUserStore } from '@/store/user-store';
+import MessageRowComponent from '@/components/MessageRowComponent.vue';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 const userStore = useUserStore();
 const { chats, userDataForChat, uid } = storeToRefs(userStore);
 
