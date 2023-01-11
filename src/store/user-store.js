@@ -56,26 +56,20 @@ export const useUserStore = defineStore("user", {
       }
     },
     async authenticateUser(email, password) {
-      // console.log("Authenticating user");
       let loginStatus = false;
       const querySnapshot = await getDocs(
         query(collection(db, "users"), where("email", "==", email))
       );
       querySnapshot.forEach(async (doc) => {
-        // console.log(doc.data());
         if (doc.data().password === password) {
-          // console.log("User exists");
           this.uid = doc.data().uid;
           this.email = doc.data().email;
           this.picture = doc.data().picture;
           this.firstName = doc.data().firstName;
           this.lastName = doc.data().lastName;
-          // console.log("login successful");
           loginStatus = true;
           await this.getAllUsers();
         } else {
-          // console.log("User does not exist");
-          // console.log("Invalid credentials");
           loginStatus = false;
         }
       });
@@ -111,22 +105,9 @@ export const useUserStore = defineStore("user", {
         query(collection(db, "users"), where("email", "==", email))
       );
       if (querySnapshot.empty) {
-        // console.log("User does not exist");
         return false;
       }
-      // console.log("User exists");
       return true;
-      console.log(querySnapshot[0].data());
-      // querySnapshot.forEach((doc) => {
-      //   console.log(doc.data());
-      //   if (doc.data().email === email) {
-      //     console.log("User exists");
-      //     return true;
-      //   } else {
-      //     console.log("User does not exist");
-      //     return false;
-      //   }
-      // });
     },
 
     async saveUserDetails(userData, isGoogleUser) {
@@ -135,7 +116,7 @@ export const useUserStore = defineStore("user", {
       let newUserData = {
         uid: "",
         email: "",
-        picture: "",
+        picture: "/user-profile-default.png",
         firstName: "",
         lastName: "",
         isGoogleUser: false,
@@ -185,47 +166,27 @@ export const useUserStore = defineStore("user", {
     getAllChatsByUser() {
       const q = query(collection(db, "chat"));
 
+      // Get all chats
       onSnapshot(q, (querySnapshot) => {
-        let chatArray = [];
+        // this.chats = [];
         querySnapshot.forEach((doc) => {
-          let data = {
-            id: doc.id,
-            uid1: doc.data().uid1,
-            uid2: doc.data().uid2,
-            user1HasViewed: doc.data().user1HasViewed,
-            user2HasViewed: doc.data().user2HasViewed,
-            messages: doc.data().messages,
-          };
 
-          if (doc.data().uid1 === this.uid) chatArray.push(data);
-          if (doc.data().uid2 === this.uid) chatArray.push(data);
-
-          this.removeUsersFromFindFriends = [];
-
-          chatArray.forEach((chat) => {
-            if (this.uid === chat.uid1) {
-              this.allUsers.forEach((user) => {
-                if (user.uid == chat.uid2) {
-                  chat.user = user;
+          if (doc.data().uid1 === this.uid || doc.data().uid2 === this.uid) {
+            this.chats.push({ id: doc.id, ...doc.data() });
+            this.allUsers.forEach((user) => {
+              if (user.uid !== this.uid) {
+                if (doc.data().uid1 == user.uid) {
+                  this.chats[this.chats.length - 1].user = user;
+                  this.removeUsersFromFindFriends.push(user.uid);
+                } else if (doc.data().uid2 == user.uid) {
+                  this.chats[this.chats.length - 1].user = user;
                   this.removeUsersFromFindFriends.push(user.uid);
                 }
-              });
-            }
+              }
+            });
+          }
 
-            if (this.uid === chat.uid2) {
-              this.allUsers.forEach((user) => {
-                if (user.uid == chat.uid1) {
-                  chat.user = user;
-                  this.removeUsersFromFindFriends.push(user.uid);
-                }
-              });
-            }
-          });
-
-          this.chats = [];
-          chatArray.forEach((chat) => {
-            this.chats.push(chat);
-          });
+          // this.removeUsersFromFindFriends = [];
         });
       });
     },
