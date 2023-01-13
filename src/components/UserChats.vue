@@ -5,7 +5,17 @@
   >
     <div class="flex row items-center justify-between pt-1 px-2">
       <div class="px-5 py-2 text-gray-400">Chats</div>
-      <span>X</span>
+      <span
+      v-if="userStore.userDataForChat.length || userStore.currentChat"
+        @click="
+          () => {
+            userStore.userDataForChat = [];
+            userStore.currentChat = null;
+          }
+        "
+        class="text-gray-800 hover:text-gray-400 cursor-pointer"
+        >X</span
+      >
     </div>
     <div v-for="chat in chats" :key="chat">
       <div @click="openChat(chat)">
