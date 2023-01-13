@@ -1,20 +1,16 @@
 <template>
-  <div class="pt-1 overflow-auto">
-    <div class="flex justify-between items-center px-5 py-2">
-      <div class="text-gray-400">Chats</div>
-      <span
-        @click="
-          () => {
-            userStore.userDataForChat = [];
-            userStore.currentChat = [];
-          }
-        "
-        class="text-slate-400 hover:text-slate-700 cursor-pointer"
-        >X</span
-      >
+  <div
+    id="Messages"
+    class="pt-1 z-0 overflow-auto fixed h-[calc(100vh-100px)] w-[420px]"
+  >
+    <div class="flex row items-center justify-between pt-1 px-2">
+      <div class="px-5 py-2 text-gray-400">Chats</div>
+      <span>X</span>
     </div>
-    <div v-for="chat in chats" :key="chat" @click="openChat(chat)">
-      <MessageRowComponent :chat="chat" />
+    <div v-for="chat in chats" :key="chat">
+      <div @click="openChat(chat)">
+        <MessageRowComponent :chat="chat" />
+      </div>
     </div>
   </div>
 </template>
