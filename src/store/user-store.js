@@ -168,7 +168,7 @@ export const useUserStore = defineStore("user", {
 
       // Get all chats
       onSnapshot(q, (querySnapshot) => {
-        // this.chats = [];
+        this.chats = [];
         querySnapshot.forEach((doc) => {
 
           if (doc.data().uid1 === this.uid || doc.data().uid2 === this.uid) {
