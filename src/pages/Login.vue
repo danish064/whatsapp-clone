@@ -7,8 +7,8 @@
 
     <div class="max-w-xl mx-auto">
       <div class="mt-10 flex items-center w-full">
-        <img width="40" src="/whatsapp-logo.png" alt="" />
-        <div class="font-semibold text-gray-100 ml-6">WHATSAPP WEB</div>
+        <!-- <img width="40" src="/whatsapp-logo.png" alt="" /> -->
+        <div class="font-semibold text-gray-100 ml-6">Buzz Chat</div>
       </div>
 
       <div class="bg-white rounded-md z-10 px-20 pt-10 pb-10 m-6 mt-10">

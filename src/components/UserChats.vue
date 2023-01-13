@@ -4,7 +4,9 @@
     class="pt-1 z-0 overflow-auto fixed h-[calc(100vh-100px)] w-[420px]"
   >
     <div class="flex row items-center justify-between pt-1 px-2">
-      <div class="px-5 py-2 text-gray-400">Chats</div>
+      <div class="px-5 py-2 text-gray-400">Chats 
+        <!-- <oicon /> <tickicon/> -->
+      </div>
       <span
       v-if="userStore.userDataForChat.length || userStore.currentChat"
         @click="
@@ -28,6 +30,8 @@
 <script setup>
 import { useUserStore } from '@/store/user-store';
 import MessageRowComponent from '@/components/MessageRowComponent.vue';
+import oicon from '@/icons/oicon.vue';
+import tickicon from '@/icons/tickicon.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 const userStore = useUserStore();

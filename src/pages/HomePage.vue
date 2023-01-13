@@ -56,18 +56,17 @@
         <div class="grid h-screen place-items-center">
           <div>
             <div class="w-full flex items-center justify-center">
-              <img width="375" src="/w-web-not-loaded-chat.png" alt="" />
+              <chaticon />
             </div>
             <div class="text-[32px] text-gray-500 font-light mt-10">
-              WhatsApp Web
+              Buzz Chat
             </div>
             <div class="text-[14px] text-gray-600 mt-2">
               <div>
-                Send and receive messages without keeping your phone online.
+                It's very lonley here... start a chat maybe??
               </div>
               <div>
-                Use WhatsApp on up to 4 linked devices and 1 phone at the same
-                time.
+                <!-- Send and receive messages with other people online. -->
               </div>
             </div>
           </div>
@@ -81,6 +80,7 @@
 import UserChats from '@/components/UserChats.vue';
 import CurrentChat from '@/components/CurrentChat.vue';
 import FindFriends from '@/components/FindFriends.vue';
+import chaticon from '@/icons/chaticon.vue';
 
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';

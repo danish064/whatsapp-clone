@@ -13,9 +13,11 @@ const routes = [
     path: "/login",
     component: Login,
   },
+
   {
     // path: '/:garbage',
     path: '/:pathMatch(.*)*',
+    // path: '/:catchAll(.*)*',
     component: PageNotFound
   }
 ];
@@ -26,9 +28,9 @@ const router = createRouter({
 });
 router.beforeEach((to, from) => {
   const userStore = useUserStore();
-  if (userStore.uid == '' && to.path !== '/login') {
-    return { path: '/login' }
-  }
+  // if (userStore.uid == '' && to.path !== '/login') {
+//   return { path: '/login' }
+  // }
 
   if (userStore.uid !== '' && to.path === '/login') {
     return { path: '/' }
